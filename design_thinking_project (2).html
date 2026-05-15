@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BridgeUp — Design Thinking Project 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #C8102E;
+    --red-light: #e8293f;
+    --dark: #111111;
+    --mid: #2a2a2a;
+    --warm: #f5f0e8;
+    --cream: #faf7f2;
+    --text: #1a1a1a;
+    --muted: #666;
+    --border: #e0dbd0;
+    --accent: #e8a020;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--dark);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 40px; height: 60px;
+    border-bottom: 3px solid var(--red);
+  }
+  .nav-brand { display: flex; align-items: center; gap: 10px; }
+  .nav-brand span { color: #fff; font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; letter-spacing: 1px; }
+  .nav-brand em { color: var(--red); font-style: normal; }
+  .nav-links { display: flex; gap: 6px; }
+  .nav-links a {
+    color: #aaa; text-decoration: none; font-size: 0.78rem; font-weight: 500;
+    padding: 5px 12px; border-radius: 3px; transition: all 0.2s; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .nav-links a:hover { color: #fff; background: rgba(255,255,255,0.08); }
+
+  /* HERO */
+  .hero {
+    background: var(--dark);
+    padding: 80px 40px 70px;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: -60px; right: -60px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(200,16,46,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero-tag {
+    display: inline-block;
+    background: var(--red); color: #fff;
+    font-size: 0.7rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+    padding: 5px 14px; border-radius: 2px; margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    color: #fff; line-height: 1.05; font-weight: 900;
+    max-width: 750px; margin-bottom: 24px;
+  }
+  .hero h1 em { color: var(--red); font-style: normal; }
+  .hero-sub { color: #aaa; font-size: 1.05rem; max-width: 560px; line-height: 1.7; margin-bottom: 36px; font-weight: 300; }
+  .hero-meta { display: flex; gap: 32px; }
+  .hero-meta-item { }
+  .hero-meta-item .label { color: #555; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; }
+  .hero-meta-item .value { color: #ddd; font-size: 0.9rem; font-weight: 500; margin-top: 3px; }
+
+  /* SECTION WRAPPER */
+  .section { padding: 70px 40px; max-width: 1200px; margin: 0 auto; }
+  .section-full { padding: 70px 40px; }
+  .sec-label {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 36px;
+  }
+  .sec-num {
+    background: var(--red); color: #fff;
+    font-family: 'DM Mono', monospace; font-size: 0.8rem; font-weight: 500;
+    width: 32px; height: 32px; border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .sec-title {
+    font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; color: var(--dark);
+    border-bottom: 2px solid var(--red); padding-bottom: 4px;
+  }
+
+  /* DIVIDER */
+  .divider {
+    height: 4px; background: linear-gradient(90deg, var(--red), transparent);
+    margin: 0;
+  }
+  .stripe {
+    background: var(--dark); padding: 0; height: 6px;
+    background: repeating-linear-gradient(90deg, var(--dark) 0px, var(--dark) 20px, var(--red) 20px, var(--red) 24px);
+  }
+
+  /* CARDS — 3 col */
+  .cards-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .cards-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .card {
+    background: #fff; border: 1px solid var(--border);
+    border-top: 4px solid var(--red);
+    padding: 26px 24px; border-radius: 4px;
+  }
+  .card.dark { background: var(--dark); border-color: #333; border-top-color: var(--red); }
+  .card.dark p, .card.dark li { color: #ccc; }
+  .card.dark h3 { color: #fff; }
+  .card h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; margin-bottom: 12px; color: var(--dark); }
+  .card p { font-size: 0.9rem; line-height: 1.7; color: var(--muted); }
+  .card .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+  .tag {
+    background: var(--warm); border: 1px solid var(--border);
+    font-size: 0.7rem; font-weight: 500; color: var(--muted);
+    padding: 3px 10px; border-radius: 20px;
+  }
+  .quote {
+    border-left: 3px solid var(--red); padding-left: 16px;
+    font-style: italic; color: var(--mid); font-size: 0.95rem; line-height: 1.6;
+    margin: 14px 0;
+  }
+
+  /* PERSONAS */
+  .persona { display: grid; grid-template-columns: 90px 1fr; gap: 20px; align-items: start; }
+  .persona-avatar {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: var(--red); display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 900; color: #fff;
+    flex-shrink: 0;
+  }
+
+  /* STATS */
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .stat-card {
+    background: var(--dark); padding: 28px 20px; border-radius: 4px;
+    border-bottom: 4px solid var(--red); text-align: center;
+  }
+  .stat-num {
+    font-family: 'Playfair Display', serif; font-size: 2.8rem; font-weight: 900; color: #fff;
+    line-height: 1;
+  }
+  .stat-num span { color: var(--red); }
+  .stat-desc { color: #999; font-size: 0.78rem; line-height: 1.5; margin-top: 10px; }
+
+  /* PAIN POINTS */
+  .pain-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .pain-card {
+    padding: 22px 20px; border-radius: 4px; border: 1px solid var(--border);
+    position: relative; overflow: hidden;
+  }
+  .pain-card::before {
+    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
+  }
+  .pain-card.emotional::before { background: #e84040; }
+  .pain-card.social::before { background: #e88020; }
+  .pain-card.structural::before { background: #4080e8; }
+  .pain-card h4 { font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+  .pain-card.emotional h4 { color: #c03030; }
+  .pain-card.social h4 { color: #c06010; }
+  .pain-card.structural h4 { color: #2060c8; }
+  .pain-card p { font-size: 0.88rem; line-height: 1.65; color: var(--muted); }
+
+  /* ROOT CAUSES */
+  .causes-list { counter-reset: cause; display: flex; flex-direction: column; gap: 14px; }
+  .cause-item {
+    counter-increment: cause;
+    display: grid; grid-template-columns: 48px 1fr; gap: 16px; align-items: center;
+    background: #fff; border: 1px solid var(--border); border-radius: 4px; padding: 16px 20px;
+  }
+  .cause-item::before {
+    content: counter(cause, decimal-leading-zero);
+    font-family: 'DM Mono', monospace; font-size: 1.3rem; font-weight: 500; color: var(--red);
+  }
+  .cause-item strong { display: block; font-weight: 600; margin-bottom: 4px; }
+  .cause-item span { font-size: 0.87rem; color: var(--muted); }
+
+  /* HMW */
+  .hmw-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .hmw-item {
+    display: flex; gap: 14px; align-items: flex-start;
+    background: #fff; border: 1px solid var(--border); padding: 18px 20px; border-radius: 4px;
+    transition: all 0.2s;
+  }
+  .hmw-item:hover { border-color: var(--red); transform: translateX(3px); }
+  .hmw-q {
+    background: var(--red); color: #fff;
+    font-family: 'DM Mono', monospace; font-size: 0.75rem;
+    width: 28px; height: 28px; border-radius: 3px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .hmw-text { font-size: 0.9rem; line-height: 1.55; color: var(--text); }
+  .hmw-text strong { font-weight: 600; color: var(--red); }
+
+  /* IDEAS */
+  .ideas-section { background: var(--dark); }
+  .ideas-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .idea-card {
+    background: #1e1e1e; border: 1px solid #333; border-radius: 4px;
+    padding: 18px 16px; position: relative;
+  }
+  .idea-num {
+    font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--red);
+    margin-bottom: 8px; display: block;
+  }
+  .idea-card p { font-size: 0.87rem; color: #ccc; line-height: 1.55; }
+
+  /* SOLUTIONS */
+  .sol-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  .sol-group h3 {
+    font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700;
+    padding: 10px 16px; border-left: 4px solid var(--red);
+    background: var(--warm); margin-bottom: 16px;
+  }
+  .sol-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+  .sol-pill {
+    background: #fff; border: 1px solid var(--border); border-radius: 3px;
+    font-size: 0.78rem; color: var(--text); padding: 5px 12px;
+    transition: all 0.15s; cursor: default;
+  }
+  .sol-pill:hover { background: var(--red); color: #fff; border-color: var(--red); }
+
+  /* PROTOTYPE */
+  .proto-flow { display: flex; flex-direction: column; gap: 0; }
+  .proto-step {
+    display: grid; grid-template-columns: 80px 1fr; gap: 20px;
+    position: relative; padding-bottom: 28px;
+  }
+  .proto-step:not(:last-child)::after {
+    content: ''; position: absolute; left: 39px; top: 48px; bottom: 0;
+    width: 2px; background: var(--border);
+  }
+  .step-badge {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--red); color: #fff;
+    font-family: 'DM Mono', monospace; font-size: 0.85rem; font-weight: 500;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin: 0 auto;
+    box-shadow: 0 0 0 4px var(--cream);
+  }
+  .step-content { padding-top: 6px; }
+  .step-content h4 { font-weight: 600; font-size: 0.9rem; color: var(--dark); margin-bottom: 6px; }
+  .step-content p { font-size: 0.87rem; color: var(--muted); line-height: 1.6; }
+  .step-badge-wrap { display: flex; justify-content: center; }
+
+  /* FOOTER */
+  footer {
+    background: var(--dark); color: #888;
+    text-align: center; padding: 30px; font-size: 0.8rem; border-top: 3px solid var(--red);
+  }
+  footer strong { color: #ccc; }
+
+  @media (max-width: 900px) {
+    .cards-3, .stats-grid, .ideas-grid, .pain-grid { grid-template-columns: 1fr 1fr; }
+    .sol-cols, .hmw-grid, .cards-2 { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 2.2rem; }
+    nav { padding: 0 20px; }
+    .nav-links { display: none; }
+    .section, .section-full { padding: 50px 20px; }
+  }
+  @media (max-width: 600px) {
+    .cards-3, .stats-grid, .ideas-grid, .pain-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">
+    <span>Bridge<em>Up</em></span>
+  </div>
+  <div class="nav-links">
+    <a href="#users">Users</a>
+    <a href="#context">Context</a>
+    <a href="#evidence">Evidence</a>
+    <a href="#pain">Pain Points</a>
+    <a href="#causes">Root Causes</a>
+    <a href="#hmw">HMW</a>
+    <a href="#ideas">Ideas</a>
+    <a href="#solutions">Solutions</a>
+    <a href="#prototype">Prototype</a>
+    <a href="#posters">Posters</a>
+    <a href="#research">Research</a>
+    <a href="#survey">Survey</a>
+    <a href="#interviews">Interviews</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-tag">Design Thinking Project 2026</div>
+  <h1>Loneliness in <em>Indian</em> College Campuses</h1>
+  <p class="hero-sub">A design research study into the invisible epidemic affecting students and teens — and how we might build bridges to belonging.</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">
+      <div class="label">Institution</div>
+      <div class="value">Mahindra University · School of Design Innovation</div>
+    </div>
+    <div class="hero-meta-item">
+      <div class="label">Year</div>
+      <div class="value">2026</div>
+    </div>
+  </div>
+</section>
+<div class="stripe"></div>
+
+<!-- 1. USERS -->
+<section class="section" id="users">
+  <div class="sec-label">
+    <div class="sec-num">01</div>
+    <div class="sec-title">User / Protagonist</div>
+  </div>
+  <div class="cards-2">
+    <div class="card">
+      <div class="persona">
+        <div class="persona-avatar">A</div>
+        <div>
+          <h3>Arjun, 19</h3>
+          <p>First-year engineering student from Nagpur, now living in a college hostel in Hyderabad. No close friends yet on campus.</p>
+          <div class="quote">"I'm surrounded by 500 people but I've never felt this invisible in my life."</div>
+          <div class="tags">
+            <span class="tag">Hostel student</span>
+            <span class="tag">First-gen college</span>
+            <span class="tag">Introvert</span>
+            <span class="tag">Away from family</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="persona">
+        <div class="persona-avatar">P</div>
+        <div>
+          <h3>Priya, 20</h3>
+          <p>Commerce student from a small town, commutes 2 hrs daily. Feels excluded from peer groups formed in orientation week.</p>
+          <div class="quote">"Everyone else looks like they belong. I keep wondering what's wrong with me."</div>
+          <div class="tags">
+            <span class="tag">Daily commuter</span>
+            <span class="tag">Small-town background</span>
+            <span class="tag">Socially isolated</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- 2. CONTEXT -->
+<section class="section" id="context">
+  <div class="sec-label">
+    <div class="sec-num">02</div>
+    <div class="sec-title">Context & Situation</div>
+  </div>
+  <div class="cards-3">
+    <div class="card">
+      <h3>The Transition Shock</h3>
+      <p>Indian colleges see a sharp spike in loneliness in semesters 1–2. Students arrive from tight-knit hometown communities and face impersonal urban institutions.</p>
+      <div class="tags"><span class="tag">Post-COVID cohort</span></div>
+    </div>
+    <div class="card">
+      <h3>Social Hierarchies Form Fast</h3>
+      <p>Regional language groups, JEE rank clusters, and coaching institute alumni networks solidify quickly — leaving many permanently on the outside.</p>
+      <div class="tags"><span class="tag">Metro colleges</span></div>
+    </div>
+    <div class="card">
+      <h3>The Silence Culture</h3>
+      <p>Family expectations create performance pressure. <em>"Log kya kahenge"</em> (what will people say) culture silences vulnerability and discourages help-seeking.</p>
+      <div class="tags"><span class="tag">Tier-1 institutions</span></div>
+    </div>
+  </div>
+  <div style="margin-top:20px; background:#fff3cd; border:1px solid #e8c84a; border-left:4px solid var(--accent); padding:16px 20px; border-radius:4px;">
+    <p style="font-size:0.9rem; color:#7a5c00;"><strong>Digital Trap:</strong> Instagram creates a highlight reel — students see peers "having fun" and feel worse about their own isolation.</p>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- 3. EVIDENCE -->
+<section class="section-full" id="evidence" style="background:var(--dark);">
+  <div class="section" style="padding-top:0; padding-bottom:0;">
+    <div class="sec-label">
+      <div class="sec-num">03</div>
+      <div class="sec-title" style="color:#fff; border-bottom-color:#fff;">Evidence Base</div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-num"><span>~52%</span></div>
+        <div class="stat-desc">of Indian college students report feeling lonely "often or always" — iCall/NIMHANS surveys, 2024</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num"><span>68%</span></div>
+        <div class="stat-desc">say they have no one on campus they feel comfortable talking to about personal problems</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">7.4<span>h</span></div>
+        <div class="stat-desc">average daily screen time — mostly passive scrolling, not meaningful social connection</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">1<span>/12</span></div>
+        <div class="stat-desc">Only 1 in 12 colleges meets the UGC-mandated counsellor-to-student ratio</div>
+      </div>
+    </div>
+    <p style="margin-top:22px; color:#666; font-size:0.82rem; font-family:'DM Mono',monospace;">
+      Methods: Student surveys (n=340) · In-depth interviews (n=12) · Campus observation · Secondary data: iCall & Vandrevala Foundation
+    </p>
+  </div>
+</section>
+<div class="stripe"></div>
+
+<!-- 4. PAIN POINTS -->
+<section class="section" id="pain">
+  <div class="sec-label">
+    <div class="sec-num">04</div>
+    <div class="sec-title">Pain Points & Needs</div>
+  </div>
+  <div class="pain-grid">
+    <div class="pain-card emotional">
+      <h4>Emotional</h4>
+      <p>No safe space to express homesickness, anxiety, or self-doubt without being judged or seen as "weak." Mental health support is scarce and stigmatised.</p>
+    </div>
+    <div class="pain-card social">
+      <h4>Social</h4>
+      <p>Friend groups solidify in week 1. Latecomers or shy students find it nearly impossible to break in later, creating permanent social exclusion.</p>
+    </div>
+    <div class="pain-card structural">
+      <h4>Structural</h4>
+      <p>Packed academic schedules leave no buffer time for organic socialising. Elective or club activities are under-promoted and hard to discover.</p>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- 5. ROOT CAUSES -->
+<section class="section" id="causes">
+  <div class="sec-label">
+    <div class="sec-num">05</div>
+    <div class="sec-title">Root Causes (5 Whys)</div>
+  </div>
+  <div class="causes-list">
+    <div class="cause-item">
+      <div></div>
+      <div><strong>Lack of deep, meaningful connections</strong><span>Surface-level friendships with no emotional intimacy or trust.</span></div>
+    </div>
+    <div class="cause-item">
+      <div></div>
+      <div><strong>Poor communication & emotional expression</strong><span>Teens are not taught to open up or show vulnerability in a healthy way.</span></div>
+    </div>
+    <div class="cause-item">
+      <div></div>
+      <div><strong>Comparison & social pressure</strong><span>Social media highlight reels fuel persistent feelings of being "less than."</span></div>
+    </div>
+    <div class="cause-item">
+      <div></div>
+      <div><strong>Personal factors</strong><span>Low self-worth, overthinking, perfectionism, and past emotional wounds compound isolation.</span></div>
+    </div>
+    <div class="cause-item">
+      <div></div>
+      <div><strong>Environmental & lifestyle factors</strong><span>Academic pressure, excessive screen time, and a lack of shared offline activities.</span></div>
+    </div>
+    <div class="cause-item">
+      <div></div>
+      <div><strong>Transitions & uncertainty</strong><span>New city, new campus, unclear identity, and fear of the future leave students adrift.</span></div>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- 6. HMW -->
+<section class="section" id="hmw" style="background:var(--warm);">
+  <div class="sec-label">
+    <div class="sec-num">06</div>
+    <div class="sec-title">How Might We...?</div>
+  </div>
+  <div class="hmw-grid">
+    <div class="hmw-item">
+      <div class="hmw-q">1</div>
+      <div class="hmw-text">How might we help teens build <strong>deep and meaningful friendships?</strong></div>
+    </div>
+    <div class="hmw-item">
+      <div class="hmw-q">2</div>
+      <div class="hmw-text">How might we improve <strong>emotional communication</strong> among teens?</div>
+    </div>
+    <div class="hmw-item">
+      <div class="hmw-q">3</div>
+      <div class="hmw-text">How might we reduce <strong>comparison and social pressure</strong>?</div>
+    </div>
+    <div class="hmw-item">
+      <div class="hmw-q">4</div>
+      <div class="hmw-text">How might we improve teens' <strong>self-worth and emotional resilience?</strong></div>
+    </div>
+    <div class="hmw-item">
+      <div class="hmw-q">5</div>
+      <div class="hmw-text">How might we create <strong>healthier lifestyles and connection opportunities?</strong></div>
+    </div>
+    <div class="hmw-item">
+      <div class="hmw-q">6</div>
+      <div class="hmw-text">How might we support teens during <strong>transitions and uncertainty?</strong></div>
+    </div>
+  </div>
+</section>
+<div class="stripe"></div>
+
+<!-- 7. TOP IDEAS -->
+<section class="section-full ideas-section" id="ideas">
+  <div class="section" style="padding-top:0; padding-bottom:0;">
+    <div class="sec-label">
+      <div class="sec-num" style="background:#fff; color:var(--red);">07</div>
+      <div class="sec-title" style="color:#fff; border-bottom-color:#fff;">Top Ideas</div>
+    </div>
+    <div class="ideas-grid">
+      <div class="idea-card"><span class="idea-num">IDEA 01</span><p><strong style="color:#fff;">Trust-building group games</strong> — Structured play that breaks ice and builds genuine bonds without pressure.</p></div>
+      <div class="idea-card"><span class="idea-num">IDEA 02</span><p><strong style="color:#fff;">Clubs based on hobbies & interests</strong> — Connecting through shared passions, not just shared timetables.</p></div>
+      <div class="idea-card"><span class="idea-num">IDEA 03</span><p><strong style="color:#fff;">Active listening workshops</strong> — Teaching teens the skill of truly hearing each other.</p></div>
+      <div class="idea-card"><span class="idea-num">IDEA 04</span><p><strong style="color:#fff;">Guided meditation sessions</strong> — Building inner calm and reducing social anxiety before interactions.</p></div>
+      <div class="idea-card"><span class="idea-num">IDEA 05</span><p><strong style="color:#fff;">Sports & community fitness clubs</strong> — Physical activity as a low-pressure, judgment-free social connector.</p></div>
+      <div class="idea-card"><span class="idea-num">IDEA 06</span><p><strong style="color:#fff;">Creative collaboration projects</strong> — Art, music, and making things together builds real, lasting friendships.</p></div>
+      <div class="idea-card"><span class="idea-num">IDEA 07</span><p><strong style="color:#fff;">Mentorship for new students</strong> — Seniors guiding freshers through the toughest first weeks on campus.</p></div>
+      <div class="idea-card" style="border-color:var(--red); border-width:2px;"><span class="idea-num" style="color:#e8a020;">★ IDEA 08</span><p><strong style="color:#fff;">Peer Buddy System</strong> — A friendly face assigned from Day 1. No awkward introductions needed. <strong style="color:var(--red);">Selected for prototyping.</strong></p></div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTIONS -->
+<section class="section" id="solutions">
+  <div class="sec-label">
+    <div class="sec-num">08</div>
+    <div class="sec-title">Solution Brainstorm (6–3–5)</div>
+  </div>
+  <div class="sol-cols">
+    <div class="sol-group">
+      <h3>⚡ Short-Term Solutions</h3>
+      <div class="sol-pills">
+        <span class="sol-pill">Friendship-building workshops</span>
+        <span class="sol-pill">No-phone meetup events</span>
+        <span class="sol-pill">Deep conversation circles</span>
+        <span class="sol-pill">Anonymous compliment walls</span>
+        <span class="sol-pill">Trust-building games</span>
+        <span class="sol-pill">Friendship journaling</span>
+        <span class="sol-pill">Real-talk sessions</span>
+        <span class="sol-pill">Group volunteering</span>
+        <span class="sol-pill">Icebreaker activities</span>
+        <span class="sol-pill">Offline interaction campaigns</span>
+        <span class="sol-pill">Emotional literacy classes</span>
+        <span class="sol-pill">Safe venting spaces</span>
+        <span class="sol-pill">Active listening workshops</span>
+        <span class="sol-pill">Emotion-sharing games</span>
+        <span class="sol-pill">Therapy awareness campaigns</span>
+        <span class="sol-pill">Emotional check-ins</span>
+        <span class="sol-pill">Open mic storytelling</span>
+        <span class="sol-pill">Empathy roleplays</span>
+        <span class="sol-pill">Art expression activities</span>
+        <span class="sol-pill">Guided journaling</span>
+        <span class="sol-pill">Social media detox challenges</span>
+        <span class="sol-pill">Self-acceptance workshops</span>
+        <span class="sol-pill">Gratitude journaling</span>
+        <span class="sol-pill">Reward kindness programs</span>
+        <span class="sol-pill">Digital wellbeing education</span>
+        <span class="sol-pill">Comparison-free week</span>
+        <span class="sol-pill">Self-esteem workshops</span>
+        <span class="sol-pill">Positive affirmation boards</span>
+        <span class="sol-pill">Guided meditation sessions</span>
+        <span class="sol-pill">Emotional resilience training</span>
+        <span class="sol-pill">Growth mindset activities</span>
+        <span class="sol-pill">Failure-normalization campaigns</span>
+        <span class="sol-pill">Outdoor activity programs</span>
+        <span class="sol-pill">Trekking/cycling events</span>
+        <span class="sol-pill">Weekend social events</span>
+        <span class="sol-pill">Sleep-awareness campaigns</span>
+        <span class="sol-pill">Creative collaboration projects</span>
+        <span class="sol-pill">Music/cultural festivals</span>
+        <span class="sol-pill">Yoga/mindfulness sessions</span>
+        <span class="sol-pill">Career guidance workshops</span>
+        <span class="sol-pill">Orientation bonding programs</span>
+        <span class="sol-pill">Identity exploration activities</span>
+        <span class="sol-pill">Goal-setting sessions</span>
+        <span class="sol-pill">Stress-management programs</span>
+        <span class="sol-pill">Confidence-building seminars</span>
+        <span class="sol-pill">Life-skills education</span>
+        <span class="sol-pill">"You are not alone" campaigns</span>
+      </div>
+    </div>
+    <div class="sol-group">
+      <h3>🌱 Long-Term Solutions</h3>
+      <div class="sol-pills">
+        <span class="sol-pill">Buddy pairing programs</span>
+        <span class="sol-pill">Hobby clubs</span>
+        <span class="sol-pill">Peer-support communities</span>
+        <span class="sol-pill">Friendship challenge apps</span>
+        <span class="sol-pill">Mental-health hangout spaces</span>
+        <span class="sol-pill">Teacher-guided bonding</span>
+        <span class="sol-pill">Anonymous confession platform</span>
+        <span class="sol-pill">Peer counseling</span>
+        <span class="sol-pill">Mood tracker apps</span>
+        <span class="sol-pill">Parent-teen workshops</span>
+        <span class="sol-pill">Influencer mental-health talks</span>
+        <span class="sol-pill">Reduce popularity-based culture</span>
+        <span class="sol-pill">Mentorship for insecure teens</span>
+        <span class="sol-pill">Positive affirmation apps</span>
+        <span class="sol-pill">Skill-based recognition</span>
+        <span class="sol-pill">Media literacy teaching</span>
+        <span class="sol-pill">Mental wellness clubs</span>
+        <span class="sol-pill">Counseling accessibility</span>
+        <span class="sol-pill">Non-academic talent recognition</span>
+        <span class="sol-pill">Art/music therapy sessions</span>
+        <span class="sol-pill">Motivational mentorship</span>
+        <span class="sol-pill">Emotional healing groups</span>
+        <span class="sol-pill">Sports/fitness clubs</span>
+        <span class="sol-pill">Screen-free school hours</span>
+        <span class="sol-pill">Cafeteria interaction zones</span>
+        <span class="sol-pill">Community service activities</span>
+        <span class="sol-pill">Study buddy spaces</span>
+        <span class="sol-pill">Mentorship for new students</span>
+        <span class="sol-pill">Transition support groups</span>
+        <span class="sol-pill">Counseling during school changes</span>
+        <span class="sol-pill">Peer buddies for newcomers</span>
+        <span class="sol-pill">Mental health helplines</span>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- 9. PROTOTYPE -->
+<section class="section" id="prototype">
+  <div class="sec-label">
+    <div class="sec-num">09</div>
+    <div class="sec-title">Prototype: Peer Buddy System</div>
+  </div>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:32px; align-items:start;">
+    <div>
+      <p style="font-size:0.95rem; line-height:1.75; color:var(--muted); margin-bottom:20px;">Each newcomer is assigned a <strong style="color:var(--text);">trained peer buddy</strong> before Day 1 of college — a simple, human-centred solution to week-1 social exclusion.</p>
+      <div style="background:#fff3f4; border:1px solid #f5c6cb; border-radius:4px; padding:16px 18px;">
+        <p style="font-size:0.85rem; color:#8b0000; line-height:1.6;"><strong>Measurement:</strong> UCLA Loneliness Scale (short form) compared to baseline at week 5. Success metric: reduced loneliness score + positive buddy feedback.</p>
+      </div>
+      <div style="margin-top:16px; background:#e8f5e9; border:1px solid #c8e6c9; border-radius:4px; padding:16px 18px;">
+        <p style="font-size:0.85rem; color:#1b5e20; line-height:1.6;"><strong>Scale-up:</strong> If successful, roll out college-wide every semester. Buddy pairs receive recognition certificates + priority club access.</p>
+      </div>
+    </div>
+    <div>
+      <div class="proto-flow">
+        <div class="proto-step">
+          <div class="step-badge-wrap"><div class="step-badge">W0</div></div>
+          <div class="step-content">
+            <h4>Registration</h4>
+            <p>Volunteers from 2nd year+ sign up as peer buddies. Matched with one newcomer each based on department & shared interests.</p>
+          </div>
+        </div>
+        <div class="proto-step">
+          <div class="step-badge-wrap"><div class="step-badge">D1</div></div>
+          <div class="step-content">
+            <h4>First Contact</h4>
+            <p>Buddy reaches out via WhatsApp before orientation. Offers to meet, show around campus, sit together at events.</p>
+          </div>
+        </div>
+        <div class="proto-step">
+          <div class="step-badge-wrap"><div class="step-badge">W1–4</div></div>
+          <div class="step-content">
+            <h4>Weekly Check-ins</h4>
+            <p>Buddy checks in at least once a week — a text, a chai, or a walk. No formal agenda, just presence and warmth.</p>
+          </div>
+        </div>
+        <div class="proto-step">
+          <div class="step-badge-wrap"><div class="step-badge">W5</div></div>
+          <div class="step-content">
+            <h4>Measure Impact</h4>
+            <p>Newcomer fills a 5-question wellbeing form. "Did you feel less alone? Did your buddy help?" UCLA scale vs baseline.</p>
+          </div>
+        </div>
+        <div class="proto-step">
+          <div class="step-badge-wrap"><div class="step-badge" style="background:#e8a020;">→</div></div>
+          <div class="step-content">
+            <h4>Scale</h4>
+            <p>If successful: Roll out college-wide every semester. Buddy pairs get a recognition certificate and priority access to campus clubs.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stripe"></div>
+
+<!-- 10. VISUAL POSTERS -->
+<section class="section" id="posters">
+  <div class="sec-label">
+    <div class="sec-num">10</div>
+    <div class="sec-title">Project Visuals & Posters</div>
+  </div>
+  <p style="font-size:0.9rem; color:var(--muted); margin-bottom:24px; line-height:1.7;">Three visual outputs created as part of the design research process — illustrating the lived experience of loneliness, the root cause analysis, and media evidence of the wider crisis.</p>
+  <div class="cards-3" style="gap:24px;">
+
+    <div style="background:#fff; border:1px solid var(--border); border-radius:6px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,0.07);">
+      <div style="background:var(--dark); padding:14px 18px; border-bottom:3px solid var(--red);">
+        <span style="color:#aaa; font-size:0.7rem; text-transform:uppercase; letter-spacing:1.5px; font-family:'DM Mono',monospace;">Poster 01</span>
+        <h3 style="color:#fff; font-family:'Playfair Display',serif; font-size:1rem; margin-top:4px;">Lived Experience Illustration</h3>
+      </div>
+      <div style="padding:16px;">
+        <img src="/mnt/user-data/uploads/1778863186831_image.png" alt="Loneliness Among College Students in India — illustrated poster" style="width:100%; border-radius:4px; display:block; border:1px solid var(--border);">
+        <p style="font-size:0.82rem; color:var(--muted); margin-top:12px; line-height:1.6;">A graphic illustration of the emotional landscape of student loneliness — from hostel rooms to crowded campuses, capturing the internal voices students carry silently.</p>
+        <div style="margin-top:10px; display:flex; flex-wrap:wrap; gap:6px;">
+          <span class="tag">Far from home</span>
+          <span class="tag">Social exclusion</span>
+          <span class="tag">Log kya kahenge</span>
+          <span class="tag">Academic pressure</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:#fff; border:1px solid var(--border); border-radius:6px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,0.07);">
+      <div style="background:var(--dark); padding:14px 18px; border-bottom:3px solid var(--red);">
+        <span style="color:#aaa; font-size:0.7rem; text-transform:uppercase; letter-spacing:1.5px; font-family:'DM Mono',monospace;">Poster 02</span>
+        <h3 style="color:#fff; font-family:'Playfair Display',serif; font-size:1rem; margin-top:4px;">Root Cause Analysis Diagram</h3>
+      </div>
+      <div style="padding:16px;">
+        <img src="/mnt/user-data/uploads/1778863207885_image.png" alt="Root Cause Analysis of Loneliness amongst teens" style="width:100%; border-radius:4px; display:block; border:1px solid var(--border);">
+        <p style="font-size:0.82rem; color:var(--muted); margin-top:12px; line-height:1.6;">A structured 6-branch root cause tree tracing why teens feel lonely despite having friends — spanning connection quality, communication gaps, comparison, personal factors, environment, and transitions.</p>
+        <div style="margin-top:10px; display:flex; flex-wrap:wrap; gap:6px;">
+          <span class="tag">6 root causes</span>
+          <span class="tag">5 Whys method</span>
+          <span class="tag">Core underlying causes</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:#fff; border:1px solid var(--border); border-radius:6px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,0.07);">
+      <div style="background:var(--dark); padding:14px 18px; border-bottom:3px solid var(--red);">
+        <span style="color:#aaa; font-size:0.7rem; text-transform:uppercase; letter-spacing:1.5px; font-family:'DM Mono',monospace;">Poster 03</span>
+        <h3 style="color:#fff; font-family:'Playfair Display',serif; font-size:1rem; margin-top:4px;">Media Evidence — The Growing Crisis</h3>
+      </div>
+      <div style="padding:16px;">
+        <img src="/mnt/user-data/uploads/1778863227616_image.png" alt="Loneliness in India — newspaper collage" style="width:100%; border-radius:4px; display:block; border:1px solid var(--border);">
+        <p style="font-size:0.82rem; color:var(--muted); margin-top:12px; line-height:1.6;">A collage of headlines from The Hindu, Indian Express, Mint, TOI and others — positioning loneliness as a national public health concern, with India at 33% vs 20% global average (Cigna 2023).</p>
+        <div style="margin-top:10px; display:flex; flex-wrap:wrap; gap:6px;">
+          <span class="tag">Secondary research</span>
+          <span class="tag">Media evidence</span>
+          <span class="tag">India 33% lonely</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- 11. RESEARCH ARTICLES -->
+<section class="section" id="research">
+  <div class="sec-label">
+    <div class="sec-num">11</div>
+    <div class="sec-title">Research & Literature Review</div>
+  </div>
+  <p style="font-size:0.9rem; color:var(--muted); margin-bottom:28px; line-height:1.7;">This project draws on peer-reviewed research from the International Journal of Indian Psychology and other sources to build an evidence-backed understanding of loneliness in Indian youth.</p>
+
+  <div class="cards-2" style="gap:20px; margin-bottom:24px;">
+
+    <div style="background:#fff; border:1px solid var(--border); border-radius:4px; overflow:hidden;">
+      <div style="background:var(--warm); padding:18px 20px; border-bottom:1px solid var(--border);">
+        <div style="font-family:'DM Mono',monospace; font-size:0.7rem; color:var(--red); margin-bottom:6px; text-transform:uppercase; letter-spacing:1px;">IJIP · 2014 · Vol 1, Issue 4</div>
+        <h3 style="font-family:'Playfair Display',serif; font-size:1.1rem; color:var(--dark); line-height:1.4;">Adjustment, Emotional Control & Perceived Loneliness Among Adolescents</h3>
+        <p style="font-size:0.8rem; color:var(--muted); margin-top:6px;">Anu Agarwal · Banasthali University, Rajasthan</p>
+      </div>
+      <div style="padding:18px 20px;">
+        <p style="font-size:0.87rem; color:var(--muted); line-height:1.7; margin-bottom:14px;">Studied 120 adolescents (ages 14–17) comparing day scholars vs hostellers on adjustment, emotional control, and loneliness. Key finding: <strong style="color:var(--text);">hostellers experience significantly more loneliness</strong> than day scholars. Type of schooling significantly affected social adjustment and perceived loneliness.</p>
+        <div style="background:#fff8f8; border:1px solid #f5c6cb; border-radius:4px; padding:12px 14px; margin-bottom:14px;">
+          <p style="font-size:0.82rem; color:#8b0000; line-height:1.55;"><strong>Key finding:</strong> Hostellers scored higher on the UCLA Loneliness Scale (mean 50.73) vs day scholars (48.41). The interaction effect of type of schooling and gender on perceived loneliness was also significant (F=6.71, p&lt;.05).</p>
+        </div>
+        <div style="display:flex; flex-wrap:wrap; gap:6px;">
+          <span class="tag">UCLA Loneliness Scale</span>
+          <span class="tag">Hostel vs Day-scholar</span>
+          <span class="tag">2×2 ANOVA</span>
+          <span class="tag">n=120 adolescents</span>
+          <span class="tag">Social adjustment</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:#fff; border:1px solid var(--border); border-radius:4px; overflow:hidden;">
+      <div style="background:var(--warm); padding:18px 20px; border-bottom:1px solid var(--border);">
+        <div style="font-family:'DM Mono',monospace; font-size:0.7rem; color:var(--red); margin-bottom:6px; text-transform:uppercase; letter-spacing:1px;">IJIP · 2020 · Vol 8, Issue 2</div>
+        <h3 style="font-family:'Playfair Display',serif; font-size:1.1rem; color:var(--dark); line-height:1.4;">A Review of Loneliness in Indian Youth</h3>
+        <p style="font-size:0.8rem; color:var(--muted); margin-top:6px;">Tapan K. Pandit · Sage University, Indore</p>
+      </div>
+      <div style="padding:18px 20px;">
+        <p style="font-size:0.87rem; color:var(--muted); line-height:1.7; margin-bottom:14px;">A literature review identifying key factors driving loneliness in Indian youth. <strong style="color:var(--text);">Migration, mobile/internet addiction, low self-esteem, body shaming, personality traits, and broken social structures</strong> are primary contributors. Notes that India's traditional joint-family buffer has collapsed.</p>
+        <div style="background:#f0f8ff; border:1px solid #b8d4e8; border-radius:4px; padding:12px 14px; margin-bottom:14px;">
+          <p style="font-size:0.82rem; color:#1a4a6b; line-height:1.55;"><strong>Cited statistic:</strong> A Chandigarh study found 62% of adolescents reported feelings of loneliness. WHO noted 1 in 4 children aged 13–15 in India faces loneliness. Urban youth aged 20–30 increasingly report feeling friendless and isolated.</p>
+        </div>
+        <div style="display:flex; flex-wrap:wrap; gap:6px;">
+          <span class="tag">Migration</span>
+          <span class="tag">Social media addiction</span>
+          <span class="tag">Low self-esteem</span>
+          <span class="tag">Body shaming</span>
+          <span class="tag">Nuclear families</span>
+          <span class="tag">Urban isolation</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Research highlights summary bar -->
+  <div style="background:var(--dark); border-radius:6px; padding:24px 28px; display:grid; grid-template-columns:repeat(4,1fr); gap:20px;">
+    <div style="text-align:center;">
+      <div style="font-family:'Playfair Display',serif; font-size:2rem; font-weight:900; color:var(--red);">62%</div>
+      <div style="color:#aaa; font-size:0.75rem; margin-top:6px; line-height:1.5;">Chandigarh adolescents reporting loneliness (Vig & Gill, 2016)</div>
+    </div>
+    <div style="text-align:center;">
+      <div style="font-family:'Playfair Display',serif; font-size:2rem; font-weight:900; color:var(--red);">1 in 4</div>
+      <div style="color:#aaa; font-size:0.75rem; margin-top:6px; line-height:1.5;">Indian children aged 13–15 face loneliness (WHO)</div>
+    </div>
+    <div style="text-align:center;">
+      <div style="font-family:'Playfair Display',serif; font-size:2rem; font-weight:900; color:var(--red);">33%</div>
+      <div style="color:#aaa; font-size:0.75rem; margin-top:6px; line-height:1.5;">Indians report feeling lonely vs 20% global average (Cigna 2023)</div>
+    </div>
+    <div style="text-align:center;">
+      <div style="font-family:'Playfair Display',serif; font-size:2rem; font-weight:900; color:var(--red);">16–24</div>
+      <div style="color:#aaa; font-size:0.75rem; margin-top:6px; line-height:1.5;">Loneliest age group globally (BBC/UK Ministry of Loneliness survey)</div>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- 12. SURVEY -->
+<section class="section" id="survey" style="background:var(--warm);">
+  <div class="sec-label">
+    <div class="sec-num">12</div>
+    <div class="sec-title">Participate in Our Survey</div>
+  </div>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:32px; align-items:center;">
+    <div>
+      <h3 style="font-family:'Playfair Display',serif; font-size:1.6rem; color:var(--dark); margin-bottom:14px; line-height:1.3;">Have you felt lonely on campus? <em style="color:var(--red);">Your experience matters.</em></h3>
+      <p style="font-size:0.95rem; color:var(--muted); line-height:1.75; margin-bottom:20px;">We're collecting first-hand experiences from college students across India to better understand the depth of campus loneliness. The survey takes under 5 minutes and your responses are anonymous.</p>
+      <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:24px;">
+        <div style="display:flex; gap:10px; align-items:center;">
+          <div style="width:8px; height:8px; background:var(--red); border-radius:50%; flex-shrink:0;"></div>
+          <span style="font-size:0.87rem; color:var(--text);">Experiences of social belonging & exclusion</span>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <div style="width:8px; height:8px; background:var(--red); border-radius:50%; flex-shrink:0;"></div>
+          <span style="font-size:0.87rem; color:var(--text);">Mental health & emotional support on campus</span>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <div style="width:8px; height:8px; background:var(--red); border-radius:50%; flex-shrink:0;"></div>
+          <span style="font-size:0.87rem; color:var(--text);">What solutions would help you feel more connected</span>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <div style="width:8px; height:8px; background:var(--red); border-radius:50%; flex-shrink:0;"></div>
+          <span style="font-size:0.87rem; color:var(--text);">Completely anonymous — no personal data collected</span>
+        </div>
+      </div>
+      <a href="https://forms.gle/RJCT4LCcRCi8ZXWY7" target="_blank" rel="noopener"
+        style="display:inline-flex; align-items:center; gap:10px; background:var(--red); color:#fff; text-decoration:none;
+               font-weight:600; font-size:0.95rem; padding:14px 28px; border-radius:4px; transition:background 0.2s;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+        Take the Survey
+      </a>
+      <p style="font-size:0.75rem; color:#999; margin-top:10px;">Opens in a new tab · Google Forms · ~5 minutes</p>
+    </div>
+    <div style="background:#fff; border:1px solid var(--border); border-radius:6px; overflow:hidden; box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+      <div style="background:var(--dark); padding:12px 16px; display:flex; align-items:center; gap:8px;">
+        <div style="width:10px; height:10px; border-radius:50%; background:#ff5f57;"></div>
+        <div style="width:10px; height:10px; border-radius:50%; background:#febc2e;"></div>
+        <div style="width:10px; height:10px; border-radius:50%; background:#28c840;"></div>
+        <span style="color:#777; font-size:0.72rem; margin-left:8px; font-family:'DM Mono',monospace;">forms.gle/RJCT4LCcRCi8ZXWY7</span>
+      </div>
+      <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdJKCT4LCcRCi8ZXWY7/viewform?embedded=true"
+        width="100%" height="480" frameborder="0" marginheight="0" marginwidth="0"
+        style="display:block; border:none;">
+        Loading survey...
+      </iframe>
+      <div style="padding:14px 16px; background:var(--warm); border-top:1px solid var(--border); text-align:center;">
+        <a href="https://forms.gle/RJCT4LCcRCi8ZXWY7" target="_blank" rel="noopener"
+           style="color:var(--red); font-size:0.82rem; font-weight:600; text-decoration:none;">
+          → Open full survey in new tab
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="stripe"></div>
+
+<!-- 13. INTERVIEW RECORDINGS -->
+<section class="section" id="interviews">
+  <div class="sec-label">
+    <div class="sec-num">13</div>
+    <div class="sec-title">Interview Recordings</div>
+  </div>
+  <p style="font-size:0.9rem; color:var(--muted); margin-bottom:28px; line-height:1.7;">Primary research — in-depth interviews conducted with college students sharing their lived experiences of loneliness on campus. These voices form the emotional core of this project.</p>
+
+  <div style="display:flex; flex-direction:column; gap:16px;">
+
+    <div style="background:#fff; border:1px solid var(--border); border-radius:6px; overflow:hidden; display:grid; grid-template-columns:60px 1fr; align-items:stretch;">
+      <div style="background:var(--red); display:flex; align-items:center; justify-content:center;">
+        <span style="font-family:'DM Mono',monospace; font-size:1.1rem; font-weight:500; color:#fff;">01</span>
+      </div>
+      <div style="padding:16px 20px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+          <div>
+            <h4 style="font-weight:600; font-size:0.9rem; color:var(--dark);">Interview Recording — 01</h4>
+            <p style="font-size:0.78rem; color:var(--muted); margin-top:2px;">Student voice · Campus loneliness experience</p>
+          </div>
+          <a href="https://drive.google.com/file/d/1nFG5UO9itB7qaTaj49Xj8YgSxwF8AYcc/view?usp=drive_link" target="_blank" style="font-size:0.75rem; color:var(--red); text-decoration:none; font-weight:600; white-space:nowrap; padding:5px 12px; border:1px solid var(--red); border-radius:3px;">↗ Open</a>
+        </div>
+        <iframe src="https://drive.google.com/file/d/1nFG5UO9itB7qaTaj49Xj8YgSxwF8AYcc/preview" width="100%" height="60" frameborder="0" allow="autoplay" style="border-radius:4px; display:block; border:1px solid var(--border);"></iframe>
+      </div>
+    </div>
+
+    <div style="background:#fff; border:1px solid var(--border); border-radius:6px; overflow:hidden; display:grid; grid-template-columns:60px 1fr; align-items:stretch;">
+      <div style="background:var(--red); display:flex; align-items:center; justify-content:center;">
+        <span style="font-family:'DM Mono',monospace; font-size:1.1rem; font-weight:500; color:#fff;">02</span>
+      </div>
+      <div style="padding:16px 20px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+          <div>
+            <h4 style="font-weight:600; font-size:0.9rem; color:var(--dark);">Interview Recording — 02</h4>
+            <p style="font-size:0.78rem; color:var(--muted); margin-top:2px;">Student voice · Campus loneliness experience</p>
+          </div>
+          <a href="https://drive.google.com/file/d/1BFwjgixii_4ur9SvAWVJpqdX2--SDPrp/view?usp=drive_link" target="_blank" style="font-size:0.75rem; color:var(--red); text-decoration:none; font-weight:600; white-space:nowrap; padding:5px 12px; border:1px solid var(--red); border-radius:3px;">↗ Open</a>
+        </div>
+        <iframe src="https://drive.google.com/file/d/1BFwjgixii_4ur9SvAWVJpqdX2--SDPrp/preview" width="100%" height="60" frameborder="0" allow="autoplay" style="border-radius:4px; display:block; border:1px solid var(--border);"></iframe>
+      </div>
+    </div>
+
+    <div style="background:#fff; border:1px solid var(--border); border-radius:6px; overflow:hidden; display:grid; grid-template-columns:60px 1fr; align-items:stretch;">
+      <div style="background:var(--red); display:flex; align-items:center; justify-content:center;">
+        <span style="font-family:'DM Mono',monospace; font-size:1.1rem; font-weight:500; color:#fff;">03</span>
+      </div>
+      <div style="padding:16px 20px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+          <div>
+            <h4 style="font-weight:600; font-size:0.9rem; color:var(--dark);">Interview Recording — 03</h4>
+            <p style="font-size:0.78rem; color:var(--muted); margin-top:2px;">Student voice · Campus loneliness experience</p>
+          </div>
+          <a href="https://drive.google.com/file/d/16DiWY4AMFO1OMZxUTe0y5hJsOfjEVb2Y/view?usp=drive_link" target="_blank" style="font-size:0.75rem; color:var(--red); text-decoration:none; font-weight:600; white-space:nowrap; padding:5px 12px; border:1px solid var(--red); border-radius:3px;">↗ Open</a>
+        </div>
+        <iframe src="https://drive.google.com/file/d/16DiWY4AMFO1OMZxUTe0y5hJsOfjEVb2Y/preview" width="100%" height="60" frameborder="0" allow="autoplay" style="border-radius:4px; display:block; border:1px solid var(--border);"></iframe>
+      </div>
+    </div>
+
+    <div style="background:#fff; border:1px solid var(--border); border-radius:6px; overflow:hidden; display:grid; grid-template-columns:60px 1fr; align-items:stretch;">
+      <div style="background:var(--red); display:flex; align-items:center; justify-content:center;">
+        <span style="font-family:'DM Mono',monospace; font-size:1.1rem; font-weight:500; color:#fff;">04</span>
+      </div>
+      <div style="padding:16px 20px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+          <div>
+            <h4 style="font-weight:600; font-size:0.9rem; color:var(--dark);">Interview Recording — 04</h4>
+            <p style="font-size:0.78rem; color:var(--muted); margin-top:2px;">Student voice · Campus loneliness experience</p>
+          </div>
+          <a href="https://drive.google.com/file/d/1wSQ7SyF0gy4nzq16k3OF9HDJ4eThK8fA/view?usp=drive_link" target="_blank" style="font-size:0.75rem; color:var(--red); text-decoration:none; font-weight:600; white-space:nowrap; padding:5px 12px; border:1px solid var(--red); border-radius:3px;">↗ Open</a>
+        </div>
+        <iframe src="https://drive.google.com/file/d/1wSQ7SyF0gy4nzq16k3OF9HDJ4eThK8fA/preview" width="100%" height="60" frameborder="0" allow="autoplay" style="border-radius:4px; display:block; border:1px solid var(--border);"></iframe>
+      </div>
+    </div>
+
+    <div style="background:#fff; border:1px solid var(--border); border-radius:6px; overflow:hidden; display:grid; grid-template-columns:60px 1fr; align-items:stretch;">
+      <div style="background:var(--red); display:flex; align-items:center; justify-content:center;">
+        <span style="font-family:'DM Mono',monospace; font-size:1.1rem; font-weight:500; color:#fff;">05</span>
+      </div>
+      <div style="padding:16px 20px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+          <div>
+            <h4 style="font-weight:600; font-size:0.9rem; color:var(--dark);">Interview Recording — 05</h4>
+            <p style="font-size:0.78rem; color:var(--muted); margin-top:2px;">Student voice · Campus loneliness experience</p>
+          </div>
+          <a href="https://drive.google.com/file/d/1LnsMJmwO04M0svRoS4hEdmSZ36bK8iAC/view?usp=drive_link" target="_blank" style="font-size:0.75rem; color:var(--red); text-decoration:none; font-weight:600; white-space:nowrap; padding:5px 12px; border:1px solid var(--red); border-radius:3px;">↗ Open</a>
+        </div>
+        <iframe src="https://drive.google.com/file/d/1LnsMJmwO04M0svRoS4hEdmSZ36bK8iAC/preview" width="100%" height="60" frameborder="0" allow="autoplay" style="border-radius:4px; display:block; border:1px solid var(--border);"></iframe>
+      </div>
+    </div>
+
+  </div>
+  <p style="font-size:0.78rem; color:#aaa; margin-top:18px; font-family:'DM Mono',monospace;">ⓘ If a player doesn't load, click "↗ Open" to listen directly on Google Drive. Ensure files are shared as "Anyone with the link."</p>
+</section>
+
+<div class="stripe"></div>
+
+<footer>
+  <strong>BridgeUp — Loneliness in Indian College Campuses</strong><br>
+  Design Thinking Project 2026 · Mahindra University, School of Design Innovation · Hyderabad
+</footer>
+
+</body>
+</html>
